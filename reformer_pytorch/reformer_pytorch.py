@@ -992,8 +992,8 @@ class ReformerLM(nn.Module):
             n_local_attn_heads=n_local_attn_heads,
             pkm_layers=pkm_layers,
             pkm_num_keys=pkm_num_keys)
-        #self.norm = nn.LayerNorm(emb_dim)
-        self.norm = nn.LayerNorm(emb_dim + 1)  # here!
+        self.norm = nn.LayerNorm(emb_dim)
+        #self.norm = nn.LayerNorm(emb_dim + 1)  # here!
 
         if return_embeddings:
             self.out = Identity()
@@ -1007,11 +1007,11 @@ class ReformerLM(nn.Module):
 
     def forward(self, x, **kwargs):
         x = self.token_emb(x)
-        #x = x + self.pos_emb(x).type_as(x)
-        pe = self.pos_emb(x).type_as(x)
-        x = torch.cat((x, pe), -1)
+        x = x + self.pos_emb(x).type_as(x)
+        # pe = self.pos_emb(x).type_as(x)
+        # x = torch.cat((x, pe), -1)
 
-        #x = self.to_model_dim(x)
+        x = self.to_model_dim(x)
         x = self.reformer(x, **kwargs)
         x = self.norm(x)
         return self.out(x)
