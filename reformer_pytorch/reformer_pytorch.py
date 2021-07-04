@@ -992,7 +992,8 @@ class ReformerLM(nn.Module):
             n_local_attn_heads=n_local_attn_heads,
             pkm_layers=pkm_layers,
             pkm_num_keys=pkm_num_keys)
-        self.norm = nn.LayerNorm(emb_dim)
+        #self.norm = nn.LayerNorm(emb_dim)
+        self.norm = nn.LayerNorm(dim)
         #self.norm = nn.LayerNorm(emb_dim + 1)  # here!
 
         if return_embeddings:
